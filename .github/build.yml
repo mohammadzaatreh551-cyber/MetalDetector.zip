@@ -9,6 +9,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Show file structure
+        run: find . -name "gradlew" -type f
+
       - uses: actions/setup-java@v4
         with:
           java-version: '17'
