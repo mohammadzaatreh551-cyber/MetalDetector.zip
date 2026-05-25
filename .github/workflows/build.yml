@@ -15,14 +15,18 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
       - name: Build with Gradle
-        run: ./gradlew assembleDebug
+        run: |
+          # البحث عن المسار الذي يحتوي على ملف gradlew
+          GRADLE_DIR=$(find . -name "gradlew" -exec dirname {} \;)
+          echo "Found gradle in: $GRADLE_DIR"
+          cd "$GRADLE_DIR"
+          chmod +x gradlew
+          ./gradlew assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: MetalDetector-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+          # البحث عن ملف الـ apk في أي مجلد فرعي داخل المشروع
+          path: **/app-debug.apk
