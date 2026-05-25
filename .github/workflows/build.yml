@@ -5,6 +5,7 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -15,18 +16,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Grant execute permission
+        run: chmod +x gradlew
+
       - name: Build with Gradle
-        run: |
-          # البحث عن المسار الذي يحتوي على ملف gradlew
-          GRADLE_DIR=$(find . -name "gradlew" -exec dirname {} \;)
-          echo "Found gradle in: $GRADLE_DIR"
-          cd "$GRADLE_DIR"
-          chmod +x gradlew
-          ./gradlew assembleDebug
+        run: ./gradlew assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: MetalDetector-APK
-          # البحث عن ملف الـ apk في أي مجلد فرعي داخل المشروع
-          path: **/app-debug.apk
+          name: app-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
