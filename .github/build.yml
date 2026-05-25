@@ -14,15 +14,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Find gradlew and build
+      - name: Unzip and Build
         run: |
-          echo "=== All files ==="
-          find . -name "gradlew"
-          echo "=== Building ==="
-          GRADLEW=$(find . -name "gradlew" -type f | head -1)
-          chmod +x "$GRADLEW"
-          DIR=$(dirname "$GRADLEW")
-          cd "$DIR"
+          unzip MetalDetector.zip
+          cd MetalDetector
+          chmod +x gradlew
           ./gradlew assembleDebug
 
       - uses: actions/upload-artifact@v4
